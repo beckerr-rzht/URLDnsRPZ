@@ -1,0 +1,10 @@
+loadplugin Mail::SpamAssassin::Plugin::URLDnsRPZ URLDnsRPZ.pm
+
+ifplugin Mail::SpamAssassin::Plugin::URLDnsRPZ
+
+body       URL_DNS_RPZ   eval:check_url_dnsrpz('^.*\.rpz\.(dfn\.de|switch\.ch)$')
+score      URL_DNS_RPZ   3.0
+describe   URL_DNS_RPZ   URL is filtered by DNS RPZ
+
+endif
+
