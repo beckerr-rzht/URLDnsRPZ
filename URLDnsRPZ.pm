@@ -15,15 +15,15 @@ part of any url found in a email is DNS RPZ filtered
 
 URLDnsRPZ is a plugin for SpamAssasin. It takes all URLs contained in a
 email and resolves their hostname sequentially using DNS. The DNS response
-is checked for having an "owner" in its "additions section". If this owner
+is checked for having an `owner` in its `additional` section". If this owner
 matches an given regex the check terminates and returns a match.
 
 The check function takes one mandatory and one optional argument:
 
  eval:check_url_dnsrpz(<regex>[,<linktype>)
 
- regex    - Regular expression to use for checking the "owner" listed in the
-            "addition section" return from the DNS server. (mandatory)
+ regex    - Regular expression to use for checking the `owner` listed in the
+            `additional` section returned from the DNS server. (mandatory)
  linktype - Type of URL to check. Valid types are 'a', 'img' and 'parsed'.
             See SpamAssain doumentation for more information.
             (optional, default is 'a')

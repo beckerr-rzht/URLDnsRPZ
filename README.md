@@ -4,7 +4,7 @@
 Checks if the hostname part of any url found in a email is DNS RPZ filtered
 
 ## Usage
-```
+```text
  loadplugin Mail::SpamAssassin::Plugin::URLDnsRPZ URLDnsRPZ.pm
 
  body       URL_DNS_RPZ   eval:check_url_dnsrpz('^.*\.rpz\.(dfn\.de|switch\.ch)$')
@@ -16,19 +16,31 @@ Checks if the hostname part of any url found in a email is DNS RPZ filtered
 
 URLDnsRPZ is a plugin for SpamAssasin. It takes all URLs contained in a
 email and resolves their hostname sequentially using DNS. The DNS response
-is checked for having an "owner" in its "additions section". If this owner
+is checked for having an `owner` in its `additional` section. If this owner
 matches an given regex the check terminates and returns a match.
 
 The check function takes one mandatory and one optional argument:
-```
+```text
  eval:check_url_dnsrpz(<regex>[,<linktype>)
 
- regex    - Regular expression to use for checking the "owner" listed in the
-            "addition section" return from the DNS server. (mandatory)
+ regex    - Regular expression to use for checking the `owner` listed in the
+            `additional` section returned from the DNS server. (mandatory)
  linktype - Type of URL to check. Valid types are 'a', 'img' and 'parsed'.
             See SpamAssain doumentation for more information.
             (optional, default is 'a')
 ```
+
+## Troubleshooting
+
+You can use `dig` to test whether and with which value `owner` is contained
+in the DNS server response:
+
+```bash
+# dig test.zone.community.rpz.dfn.de | grep "ADDITIONAL SECTION" -A1
+;; ADDITIONAL SECTION:
+zone.community.rpz.dfn.de. 300  IN      SOA     ns1.security.dfn.de.  cert.dfn-cert.de. 1732615501 600 300 604800 300
+```
+... in this case the `owner` is `zone.community.rpz.dfn.de`
 
 ## License
 
