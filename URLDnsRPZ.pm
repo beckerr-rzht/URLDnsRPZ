@@ -100,18 +100,22 @@ sub check_url_dnsrpz {
 	my ($self, $permsgstatus, $ignore, $owner_match, $type) = @_;
 	my $urls = $permsgstatus->get_uri_detail_list();
 	my $resolver = Net::DNS::Resolver->new();
+	my $seen;
 
 	foreach my $u (values %$urls) {
 
 		next unless exists $u->{types}->{$type || 'a'};
 		my ($url) =  @{$u->{cleaned}};
 
-		next if $url !~ qr(^https?://(?:.*?@)?([^/:]*));
+		next if $url !~ qr(^https?://(?:.*?@)?([^/:?&]*))i;
 		my @nameparts = split/\./,$1;
 
 		foreach my $i (0 .. scalar(@nameparts)-2) {
 
 			my $query = join('.',@nameparts[$i..@nameparts-1]);
+			next if $seen->{$query};
+			$seen->{$query}=1;
+
 			$self->log('debug', "DNS $query?");
 
 			my $owner = dns_get_owner($resolver->send($query));
